@@ -1,0 +1,81 @@
+{% extends '_base.html' %}
+{% block title %}Dynamic Forms{% endblock %}
+{% block dynamic_active %}active{% endblock %}
+{% load widget_tweaks %}
+{% load static %}
+
+
+{% block javascript %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{% static 'js/backtest/backtest.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-12">
+    <div class="page-header">
+      <h2>Fill the backtest form</h2>
+
+      <form id="full_form" action="{% url 'backtest:dynamic' %}" class="form-hotizontal" method="POST" data-url="{% url 'backtest:dynamic' %}">
+        {% csrf_token %}
+
+        <!-- id_strategy_details is a hidden field given that will be only modified in if the user clicks the button -->
+        {% for field in backtest_form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+
+
+        {% for field in backtest_form.visible_fields %}
+        <div class="form-group row">
+          <div class="col-sm-6 ">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            {% if field.id_for_label == 'id_strategy_type' %}
+            <div class="form-group row">
+              <div class="col-sm-8 js-reset-details">{{ field|add_class:'form-control' }}</div>
+              <div class="col-sm-4">
+                <div class="btn-group btn-group-justified" role="group">
+                  <div class="btn-group" role="group">
+                    <!-- <button class="btn btn-secondary" type="button">Change default values</button> -->
+                    <button  id ="button_detail" type="button" class="btn btn-primary js-modify-strategy-details" data-url="{% url 'backtest:strategy_specify' %}">
+                      Modify details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% else %}
+              {{ field|add_class:'form-control' }}
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+        <br>
+        <div id="button_backtest" class="form-group row">
+          <div class="col-sm-3">
+            <div class="btn-group btn-group-justified" role="group">
+              <div class="btn-group" role="group">
+                <button class="btn btn-primary js-create-backtest" type="submit">Run Backtest</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+
+
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-strategy">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

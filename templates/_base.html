@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+ <title>{% block title %}Dynamic Form base{% endblock %}</title>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse" style="border-radius: 0px;">
+ <div class="container-fluid">
+   <div class="navbar-header">
+     <a class="navbar-brand" href="#">Dynamic Form</a>
+   </div>
+   <ul class="nav navbar-nav">
+     <li class="{% block dynamic_active %}{% endblock %}">
+ <a href="{% url 'backtest:dynamic' %}">Dynamic Demo</a></li>
+   </ul>
+ </div>
+</nav>
+
+<div class="container-fluid">
+ {% block body %}
+ {% endblock %}
+</div>
+
+{% block javascript %}
+{% endblock %}
+
+</body>
+</html>
